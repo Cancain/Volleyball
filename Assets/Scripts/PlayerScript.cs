@@ -2,10 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour {
+public class PlayerScript : MonoBehaviour
+{
     private Rigidbody2D controller;
     [SerializeField] private readonly float speed = 20f;
     [SerializeField] private readonly float jumpForce = 5f;
+
+    private bool grounded = true;
+    public void SetGrounded(bool ground){
+        grounded = ground;
+    }
+    public bool IsGrounded(){
+        return grounded;
+    }
 
     private void Start() {
         controller = GetComponent<Rigidbody2D>();
@@ -19,9 +28,12 @@ public class Player : MonoBehaviour {
     }
 
     private void CheckPlayerJump(){
-        if(Input.GetKeyDown(KeyCode.UpArrow)){
-            Vector2 movement = new Vector2(0, jumpForce);
-            controller.velocity = movement;
+        if(IsGrounded()){
+            if(Input.GetKeyDown(KeyCode.UpArrow)){
+                SetGrounded(false);
+                Vector2 movement = new Vector2(0, jumpForce);
+                controller.velocity = movement;
+            }
         }
     }
     private void FixedUpdate() {
