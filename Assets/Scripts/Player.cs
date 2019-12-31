@@ -7,6 +7,8 @@ public class Player : MonoBehaviour {
     [SerializeField] private readonly float speed = 20f;
     [SerializeField] private readonly float jumpForce = 5f;
 
+    private bool grounded = false;
+
     private void Start() {
         controller = GetComponent<Rigidbody2D>();
     }
