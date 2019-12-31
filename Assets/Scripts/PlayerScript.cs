@@ -5,14 +5,12 @@ using UnityEngine;
 public class PlayerScript : MonoBehaviour
 {
     private Rigidbody2D controller;
-    [SerializeField] private readonly float speed = 15f;
+    [SerializeField] private readonly float speed = 5f;
     [SerializeField] private readonly float jumpForce = 7f;
 
     private bool grounded = true;
-    private bool isJumping = false;
     public void SetGrounded(bool ground){
         grounded = ground;
-        isJumping = false;
     }
     public bool IsGrounded(){
         return grounded;
@@ -23,14 +21,22 @@ public class PlayerScript : MonoBehaviour
     }
 
     private void CheckPlayerHorizontalMovement() {
-        float movementHorizontal = Input.GetAxis("Horizontal");
+        // float movementHorizontal = Input.GetAxis("Horizontal");
 
-        if(isJumping){
-            movementHorizontal = movementHorizontal / 2;
+        // if(isJumping){
+        //     movementHorizontal = movementHorizontal / 2;
+        // }
+
+        // Vector2 movement = new Vector2(movementHorizontal, 0);
+        // controller.AddForce(movement * speed);
+
+        if(Input.GetKey(KeyCode.RightArrow)){
+            controller.velocity = transform.right * speed;
         }
 
-        Vector2 movement = new Vector2(movementHorizontal, 0);
-        controller.AddForce(movement * speed);
+        if(Input.GetKey(KeyCode.LeftArrow)){
+            controller.velocity = -transform.right * speed;
+        }
     }
 
     private void CheckPlayerJump(){
@@ -38,8 +44,8 @@ public class PlayerScript : MonoBehaviour
             if(Input.GetKeyDown(KeyCode.UpArrow)){
                 SetGrounded(false);
                 Vector2 movement = new Vector2(0, jumpForce);
-                controller.velocity = movement;
-                isJumping = true;
+                // controller.velocity = movement;
+                controller.AddForce(movement, ForceMode2D.Impulse);
             }
         }
     }
