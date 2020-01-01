@@ -47,7 +47,6 @@ public class PlayerScript : MonoBehaviour
     private void FixedUpdate() {
         CheckPlayerHorizontalMovement();
         CheckPlayerJump();
-        Debug.Log(grounded);
     }
 
 }
