@@ -5,8 +5,8 @@ using UnityEngine;
 public class PlayerScript : MonoBehaviour
 {
     private Rigidbody2D controller;
-    [SerializeField] private readonly float speed = 5f;
-    [SerializeField] private readonly float jumpForce = 7f;
+    [SerializeField] private readonly float speed = 1f;
+    [SerializeField] private readonly float jumpForce = 20f;
 
     private bool grounded = true;
     public void SetGrounded(bool ground){
@@ -18,24 +18,19 @@ public class PlayerScript : MonoBehaviour
 
     private void Start() {
         controller = GetComponent<Rigidbody2D>();
+        controller.drag = 2;
     }
 
     private void CheckPlayerHorizontalMovement() {
-        // float movementHorizontal = Input.GetAxis("Horizontal");
-
-        // if(isJumping){
-        //     movementHorizontal = movementHorizontal / 2;
-        // }
-
-        // Vector2 movement = new Vector2(movementHorizontal, 0);
-        // controller.AddForce(movement * speed);
-
+        Vector2 movement = controller.velocity;
         if(Input.GetKey(KeyCode.RightArrow)){
-            controller.velocity = transform.right * speed;
+            movement.x += speed;
+            controller.velocity = movement;
         }
 
         if(Input.GetKey(KeyCode.LeftArrow)){
-            controller.velocity = -transform.right * speed;
+            movement.x -= speed;
+            controller.velocity = movement;
         }
     }
 
@@ -43,15 +38,16 @@ public class PlayerScript : MonoBehaviour
         if(IsGrounded()){
             if(Input.GetKeyDown(KeyCode.UpArrow)){
                 SetGrounded(false);
-                Vector2 movement = new Vector2(0, jumpForce);
-                // controller.velocity = movement;
-                controller.AddForce(movement, ForceMode2D.Impulse);
+                Vector2 movement = controller.velocity;
+                movement.y += jumpForce;
+                controller.velocity = movement;
             }
         }
     }
     private void FixedUpdate() {
         CheckPlayerHorizontalMovement();
         CheckPlayerJump();
+        Debug.Log(grounded);
     }
 
 }
