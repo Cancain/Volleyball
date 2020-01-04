@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class OpponentSideScript : MonoBehaviour {
+    [SerializeField] private GameObject opponent;
     private OpponentScript opponentScript;
     private bool isActive;
     public void SetActive(bool active) {
@@ -14,17 +15,17 @@ public class OpponentSideScript : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D other) {
         if (other.tag == "Ball") {
-            opponentScript.SetActive(true);
+            opponentScript.Activate(other.GetComponent<Rigidbody2D>());
         }
     }
 
     private void OnTriggerExit2D(Collider2D other) {
         if (other.tag == "Ball") {
-            opponentScript.SetActive(false);
+            opponentScript.Deactivate();
         }
     }
 
     private void Start() {
-        opponentScript = gameObject.GetComponentInParent<OpponentScript>();
+        opponentScript = opponent.GetComponent<OpponentScript>();
     }
 }
