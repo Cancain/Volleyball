@@ -12,19 +12,19 @@ public class DebugScript : MonoBehaviour {
         return active;
     }
 
-    private void spawnBall() {
+    private void SpawnBall() {
         Instantiate(ball);
     }
 
-    private void checkPlayerInput() {
+    private void CheckPlayerInput() {
         if (Input.GetKeyDown(KeyCode.M)) {
-            spawnBall();
+            SpawnBall();
         }
     }
 
     private void Update() {
         if (active) {
-            checkPlayerInput();
+            CheckPlayerInput();
         }
     }
 }
