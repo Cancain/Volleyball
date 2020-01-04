@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameScript : MonoBehaviour {
-    [SerializeField] private GameObject ball;
+    [SerializeField] public GameObject ball;
     private bool hasBall;
     private bool isActive;
     public void SetActive(bool active) {
@@ -13,13 +13,13 @@ public class GameScript : MonoBehaviour {
         return isActive;
     }
 
-    private void spawnBall() {
+    private void SpawnBall() {
         Instantiate(ball);
     }
 
-    private void checkBall() {
+    private void CheckBall() {
         if (isActive && !hasBall) {
-            spawnBall();
+            SpawnBall();
             hasBall = true;
         }
     }
@@ -29,6 +29,6 @@ public class GameScript : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-        checkBall();
+        CheckBall();
     }
 }

@@ -12,7 +12,7 @@ public class BallScript : MonoBehaviour {
         return isActive;
     }
 
-    private bool isOutOfBounds(Collision2D coll) {
+    private bool IsOutOfBounds(Collision2D coll) {
         if (coll.collider.tag == "Ground" && !hasScored) {
             hasScored = true;
             return true;
@@ -21,7 +21,7 @@ public class BallScript : MonoBehaviour {
     }
 
     private void OnCollisionEnter2D(Collision2D coll) {
-        if (isOutOfBounds(coll)) {
+        if (IsOutOfBounds(coll)) {
             Debug.Log("score");
         }
     }

@@ -4,13 +4,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneSelector : MonoBehaviour {
-    public void toNextScene() {
+    public void ToNextScene() {
         int currentScene = SceneManager.GetActiveScene().buildIndex;
         int nextScene = currentScene + 1;
         SceneManager.LoadScene(nextScene);
     }
 
-    public void toMenu() {
+    public void ToMenu() {
         SceneManager.LoadScene(0);
     }
 }
