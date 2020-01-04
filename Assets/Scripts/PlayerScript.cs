@@ -7,13 +7,7 @@ public class PlayerScript : MonoBehaviour {
     [SerializeField] private readonly float speed = 1f;
     [SerializeField] private readonly float jumpForce = 20f;
 
-    private bool grounded = true;
-    public void SetGrounded(bool ground) {
-        grounded = ground;
-    }
-    public bool IsGrounded() {
-        return grounded;
-    }
+    private bool isGrounded = true;
 
     private void Start() {
         controller = GetComponent<Rigidbody2D>();
@@ -35,19 +29,19 @@ public class PlayerScript : MonoBehaviour {
 
     private void OnCollisionEnter2D(Collision2D collision) {
         if (collision.collider.tag == "Ground") {
-            SetGrounded(true);
+            isGrounded = true;
         }
     }
 
     private void Jump() {
-        SetGrounded(false);
+        isGrounded = false;
         Vector2 movement = controller.velocity;
         movement.y += jumpForce;
         controller.velocity = movement;
     }
 
     private void CheckPlayerJump() {
-        if (IsGrounded()) {
+        if (isGrounded) {
             if (Input.GetKeyDown(KeyCode.UpArrow)) {
                 Jump();
             }
