@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerScript : MonoBehaviour
-{
+public class PlayerScript : MonoBehaviour {
     private Rigidbody2D controller;
     [SerializeField] private readonly float speed = 1f;
     [SerializeField] private readonly float jumpForce = 20f;
 
     private bool grounded = true;
-    public void SetGrounded(bool ground){
+    public void SetGrounded(bool ground) {
         grounded = ground;
     }
-    public bool IsGrounded(){
+    public bool IsGrounded() {
         return grounded;
     }
 
@@ -23,30 +22,34 @@ public class PlayerScript : MonoBehaviour
 
     private void CheckPlayerHorizontalMovement() {
         Vector2 movement = controller.velocity;
-        if(Input.GetKey(KeyCode.RightArrow)){
+        if (Input.GetKey(KeyCode.RightArrow)) {
             movement.x += speed;
             controller.velocity = movement;
         }
 
-        if(Input.GetKey(KeyCode.LeftArrow)){
+        if (Input.GetKey(KeyCode.LeftArrow)) {
             movement.x -= speed;
             controller.velocity = movement;
         }
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {
-        if(collision.collider.tag == "Ground"){
+        if (collision.collider.tag == "Ground") {
             SetGrounded(true);
         }
     }
 
-    private void CheckPlayerJump(){
-        if(IsGrounded()){
-            if(Input.GetKeyDown(KeyCode.UpArrow)){
-                SetGrounded(false);
-                Vector2 movement = controller.velocity;
-                movement.y += jumpForce;
-                controller.velocity = movement;
+    private void Jump() {
+        SetGrounded(false);
+        Vector2 movement = controller.velocity;
+        movement.y += jumpForce;
+        controller.velocity = movement;
+    }
+
+    private void CheckPlayerJump() {
+        if (IsGrounded()) {
+            if (Input.GetKeyDown(KeyCode.UpArrow)) {
+                Jump();
             }
         }
     }

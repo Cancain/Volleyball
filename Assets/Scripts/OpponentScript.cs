@@ -31,13 +31,31 @@ public class OpponentScript : MonoBehaviour {
         return isActive;
     }
 
-    public void Jump() {
+    private bool IsWithinRange(float value, float min, float max) {
+        return value >= min && value <= max;
+    }
+
+    private void ShouldJump() {
+        if (IsActive()) {
+            float opponentXPos = transform.position.x;
+            float ballXPos = targetPos.x;
+            float reach = 0.5f;
+            float minRange = ballXPos - reach;
+            float maxRange = ballXPos + reach;
+
+            if (IsWithinRange(opponentXPos, minRange, maxRange)) {
+                Jump();
+            }
+        }
+    }
+
+    private void Jump() {
         Vector2 movement = controller.velocity;
-        movement.y = jumpForce;
+        movement.y += jumpForce;
         controller.velocity = movement;
     }
 
-    public void FollowBall() {
+    private void FollowBall() {
         Vector2 movement = new Vector2(targetPos.x, controller.position.y);
         transform.position = Vector2.MoveTowards(
             transform.position,
@@ -46,15 +64,16 @@ public class OpponentScript : MonoBehaviour {
             );
     }
 
-    public void UpdateTarget() {
+    private void UpdateTarget() {
         if (IsActive()) {
             targetPos = targetBall.position;
         }
     }
 
     private void FixedUpdate() {
-        FollowBall();
         UpdateTarget();
+        FollowBall();
+        ShouldJump();
     }
 
     private void Start() {
