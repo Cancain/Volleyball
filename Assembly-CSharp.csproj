@@ -48,7 +48,7 @@
      <Compile Include="Assets\Scripts\BallScript.cs" />
      <Compile Include="Assets\Scripts\DebugScript.cs" />
      <Compile Include="Assets\Scripts\GameScript.cs" />
-     <Compile Include="Assets\Scripts\OponentScript.cs" />
+     <Compile Include="Assets\Scripts\OpponentScript.cs" />
      <Compile Include="Assets\Scripts\OpponentSideScript.cs" />
      <Compile Include="Assets\Scripts\PlayerScript.cs" />
      <Compile Include="Assets\Scripts\SceneSelector.cs" />
