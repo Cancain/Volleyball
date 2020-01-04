@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class OpponentScript : MonoBehaviour {
-    [SerializeField] private readonly float speed = 2f;
-    [SerializeField] private readonly float jumpForce = 20f;
-
     private Rigidbody2D controller;
-
     private Rigidbody2D targetBall;
     private Vector2 targetPos;
-
+    [SerializeField] private readonly float speed = 10f;
+    [SerializeField] private readonly float jumpForce = 20f;
     [SerializeField] public GameObject start;
     private bool isActive;
+    private bool isGrounded = true;
 
     public void Activate(Rigidbody2D ball) {
         isActive = true;
@@ -31,14 +29,49 @@ public class OpponentScript : MonoBehaviour {
         return isActive;
     }
 
-    public void Jump() {
-        Vector2 movement = controller.velocity;
-        movement.y = jumpForce;
-        controller.velocity = movement;
+    private void OnCollisionEnter2D(Collision2D other) {
+        if (other.collider.tag == "Ground") {
+            isGrounded = true;
+        }
     }
 
-    public void FollowBall() {
-        Vector2 movement = new Vector2(targetPos.x, controller.position.y);
+    private bool IsWithinRange(float value, float min, float max) {
+        return value >= min && value <= max;
+    }
+
+    private void ShouldJump() {
+        if (IsActive()) {
+            Vector2 opponentPos = transform.position;
+            Vector2 ballPos = targetPos;
+
+            float xReach = 2f;
+            float minXRange = ballPos.x - xReach;
+            float maxXRange = ballPos.x + xReach;
+
+            float yReach = 3f;
+            float minYRange = ballPos.y - yReach;
+            float maxYRange = ballPos.y + yReach;
+
+            if (IsWithinRange(opponentPos.x, minXRange, maxXRange) &&
+                IsWithinRange(opponentPos.y, minYRange, maxYRange)) {
+                Jump();
+            }
+        }
+    }
+
+    private void Jump() {
+        if (isGrounded) {
+            isGrounded = false;
+            Vector2 movement = controller.velocity;
+            movement.y += jumpForce;
+            controller.velocity = movement;
+        }
+    }
+
+    private void FollowBall() {
+        //adjustment is to make the opponent try to have the ball slighty in front
+        float adjustment = 0.3f;
+        Vector2 movement = new Vector2(targetPos.x + adjustment, controller.position.y);
         transform.position = Vector2.MoveTowards(
             transform.position,
             movement,
@@ -46,15 +79,20 @@ public class OpponentScript : MonoBehaviour {
             );
     }
 
-    public void UpdateTarget() {
+    private void UpdateTarget() {
         if (IsActive()) {
             targetPos = targetBall.position;
         }
     }
 
+    private void Update() {
+        Debug.Log(isGrounded);
+    }
+
     private void FixedUpdate() {
-        FollowBall();
         UpdateTarget();
+        FollowBall();
+        ShouldJump();
     }
 
     private void Start() {
